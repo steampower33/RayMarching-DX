@@ -3,8 +3,8 @@
 class GraphicsCore
 {
 public:
-    GraphicsCore();
-    ~GraphicsCore();
+    GraphicsCore() {}
+    ~GraphicsCore() {}
 
     // [Rule] System classes should NOT be copied.
     // Copying a core system creates ambiguity in resource ownership.

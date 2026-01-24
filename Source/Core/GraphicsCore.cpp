@@ -1,25 +1,25 @@
 #include "GraphicsCore.h"
 
-GraphicsCore::GraphicsCore() {}
-
-// Thanks to ComPtr, we don't need manual Release() calls in the destructor.
-GraphicsCore::~GraphicsCore() {}
-
 bool GraphicsCore::Initialize(HWND hwnd, int width, int height)
 {
     // Setup SwapChain description (Configuration boilerplate)
     DXGI_SWAP_CHAIN_DESC scd = {};
-    scd.BufferCount = 1;                                // 1 BackBuffer (Double Buffering)
+    scd.BufferCount = 2;
+
     scd.BufferDesc.Width = width;
     scd.BufferDesc.Height = height;
-    scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Standard RGBA color format
+    scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     scd.BufferDesc.RefreshRate.Numerator = 60;
     scd.BufferDesc.RefreshRate.Denominator = 1;
     scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     scd.OutputWindow = hwnd;
-    scd.SampleDesc.Count = 1;                           // Disable MSAA (Recommended for Deferred/Compute)
+
+    scd.SampleDesc.Count = 1;
+    scd.SampleDesc.Quality = 0;
+
     scd.Windowed = TRUE;
-    scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;          // Legacy compatibility mode (FLIP_DISCARD recommended for Win10+)
+
+    scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
     // Create Device and SwapChain
     UINT createDeviceFlags = 0;

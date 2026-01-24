@@ -1,20 +1,15 @@
-struct VS_INPUT
-{
-    float3 pos : POSITION;
-    float4 col : COLOR;
-};
-
-struct PS_INPUT
+struct VS_OUTPUT
 {
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD0;
 };
 
-PS_INPUT mainVS(VS_INPUT input)
+VS_OUTPUT main(uint id : SV_VertexID)
 {
-    PS_INPUT output;
-    output.pos = float4(input.pos, 1.0);
-    output.uv = input.pos.xy * 0.5 + 0.5;
-    output.uv.y = 1.0 - output.uv.y; // Flip Y for DirectX
+    VS_OUTPUT output;
+
+    output.uv = float2((id << 1) & 2, id & 2);
+    output.pos = float4(output.uv * float2(2, -2) + float2(-1, 1), 0, 1);
+
     return output;
 }

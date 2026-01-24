@@ -1,13 +1,6 @@
 #include "TerraForgeApp.h"
 
-TerraForgeApp::TerraForgeApp()
-{
-}
-
-TerraForgeApp::~TerraForgeApp()
-{
-
-}
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 bool TerraForgeApp::Run()
 {
@@ -21,15 +14,17 @@ bool TerraForgeApp::Run()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 			if (msg.message == WM_QUIT) bIsExit = true;
-
-			m_Gfx.BeginFrame(m_ClearColor);
-			m_Renderer.PrepareShader();
-			m_Renderer.RenderQuad();
-
-			m_Gfx.EndFrame();
 		}
-
 		if (bIsExit) break;
+
+		// --- Rendering Logic ---
+
+		m_Gfx.BeginFrame(m_ClearColor);
+		m_Renderer.PrepareShader();
+		m_Renderer.Render();
+		m_Gui.Render();
+
+		m_Gfx.EndFrame();
 	}
 
 	return true;
@@ -37,6 +32,9 @@ bool TerraForgeApp::Run()
 
 LRESULT CALLBACK TerraForgeApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+		return true;
+
 	switch (message)
 	{
 	case WM_DESTROY:
@@ -64,4 +62,5 @@ void TerraForgeApp::Initialize(HINSTANCE hInstance)
 
 	m_Gfx.Initialize(hWnd, width, height);
 	m_Renderer.Initialize(m_Gfx.GetDevice(), m_Gfx.GetContext());
+	m_Gui.Initialize(hWnd, m_Gfx.GetDevice(), m_Gfx.GetContext());
 }

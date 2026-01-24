@@ -3,8 +3,8 @@
 class Renderer
 {
 public:
-    Renderer();
-    ~Renderer();
+    Renderer() {}
+    ~Renderer() {}
 
     // [Rule] System classes should NOT be copied.
     // Copying a core system creates ambiguity in resource ownership.
@@ -13,7 +13,7 @@ public:
 
     void Initialize(ID3D11Device* device, ID3D11DeviceContext* context);
     void PrepareShader();
-    void RenderQuad();
+    void Render();
 
 private:
     ID3D11Device* m_Device = nullptr;

@@ -57,6 +57,9 @@
     <ClCompile Include="Source\App\TerraForgeApp.cpp">
       <Filter>Source\App</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Gui.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\ImGui\imconfig.h">
@@ -96,6 +99,9 @@
       <Filter>Source\App</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Vertex.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Gui.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
   </ItemGroup>

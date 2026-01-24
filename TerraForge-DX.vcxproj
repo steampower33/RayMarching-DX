@@ -71,16 +71,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>F:\DirectX\TerraForge-DX\Source;F:\DirectX\TerraForge-DX\Source\Core;F:\DirectX\TerraForge-DX\Source\Tools;$(IncludePath)</IncludePath>
+    <IncludePath>F:\DirectX\TerraForge-DX\Source;F:\DirectX\TerraForge-DX\Source\Core;F:\DirectX\TerraForge-DX\Source\Tools;F:\DirectX\TerraForge-DX\External\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>F:\DirectX\TerraForge-DX\Source;F:\DirectX\TerraForge-DX\Source\Core;F:\DirectX\TerraForge-DX\Source\Tools;$(IncludePath)</IncludePath>
+    <IncludePath>F:\DirectX\TerraForge-DX\Source;F:\DirectX\TerraForge-DX\Source\Core;F:\DirectX\TerraForge-DX\Source\Tools;F:\DirectX\TerraForge-DX\External\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>F:\DirectX\TerraForge-DX\Source;F:\DirectX\TerraForge-DX\Source\Core;F:\DirectX\TerraForge-DX\Source\Tools;$(IncludePath)</IncludePath>
+    <IncludePath>F:\DirectX\TerraForge-DX\Source;F:\DirectX\TerraForge-DX\Source\Core;F:\DirectX\TerraForge-DX\Source\Tools;F:\DirectX\TerraForge-DX\External\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>F:\DirectX\TerraForge-DX\Source;F:\DirectX\TerraForge-DX\Source\Core;F:\DirectX\TerraForge-DX\Source\Tools;$(IncludePath)</IncludePath>
+    <IncludePath>F:\DirectX\TerraForge-DX\Source;F:\DirectX\TerraForge-DX\Source\Core;F:\DirectX\TerraForge-DX\Source\Tools;F:\DirectX\TerraForge-DX\External\ImGui;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>false</VcpkgEnabled>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -157,6 +160,7 @@
     <ClCompile Include="Source\App\Main.cpp" />
     <ClCompile Include="Source\App\TerraForgeApp.cpp" />
     <ClCompile Include="Source\Core\GraphicsCore.cpp" />
+    <ClCompile Include="Source\Core\Gui.cpp" />
     <ClCompile Include="Source\Core\Renderer.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -176,6 +180,7 @@
     <ClInclude Include="External\ImGui\imstb_truetype.h" />
     <ClInclude Include="Source\App\TerraForgeApp.h" />
     <ClInclude Include="Source\Core\GraphicsCore.h" />
+    <ClInclude Include="Source\Core\Gui.h" />
     <ClInclude Include="Source\Core\Renderer.h" />
     <ClInclude Include="Source\Core\Vertex.h" />
     <ClInclude Include="Source\pch.h" />
