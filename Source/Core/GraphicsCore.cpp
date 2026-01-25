@@ -59,7 +59,7 @@ void GraphicsCore::CreateRenderTarget(int width, int height)
     m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backBuffer.GetAddressOf());
 
     // Create the Render Target View (RTV)
-    m_Device->CreateRenderTargetView(backBuffer.Get(), nullptr, m_RTV.GetAddressOf());
+    m_Device->CreateRenderTargetView(backBuffer.Get(), nullptr, &m_RTV);
 
     // Configure the Viewport
     m_Viewport.TopLeftX = 0;

@@ -1,13 +1,20 @@
+#include "GameTimer.h"
+
 #include "TerraForgeApp.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 bool TerraForgeApp::Run()
 {
+	GameTimer timer;
+	timer.Reset();
+
 	bool bIsExit = false;
 
 	while (bIsExit == false)
 	{
+		timer.Tick();
+
 		MSG msg;
 		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
@@ -17,12 +24,16 @@ bool TerraForgeApp::Run()
 		}
 		if (bIsExit) break;
 
-		// --- Rendering Logic ---
+		// --- Update ---
+		m_Camera.Update(timer.GetDeltaTime());
+		m_Constant.UpdateConstant(m_Camera, timer.GetDeltaTime(), timer.GetTotalTime(), m_Width, m_Height);
 
+		// --- Rendering ---
 		m_Gfx.BeginFrame(m_ClearColor);
 		m_Renderer.PrepareShader();
+		m_Constant.BindConstantBuffer();
 		m_Renderer.Render();
-		m_Gui.Render();
+		m_Gui.Render(m_Constant, m_Camera, timer.GetTotalTime());
 
 		m_Gfx.EndFrame();
 	}
@@ -54,13 +65,13 @@ void TerraForgeApp::Initialize(HINSTANCE hInstance)
 	WNDCLASSW wndclass = { 0, WndProc, 0, 0, 0, 0, 0, 0, 0, WindowClass };
 	RegisterClassW(&wndclass);
 
-	float width = 1280.0f;
-	float height = 720.0f;
 	HWND hWnd = CreateWindowExW(0, WindowClass, Title, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720,
+		CW_USEDEFAULT, CW_USEDEFAULT, m_Width, m_Height,
 		nullptr, nullptr, hInstance, nullptr);
 
-	m_Gfx.Initialize(hWnd, width, height);
+	m_Gfx.Initialize(hWnd, m_Width, m_Height);
 	m_Renderer.Initialize(m_Gfx.GetDevice(), m_Gfx.GetContext());
 	m_Gui.Initialize(hWnd, m_Gfx.GetDevice(), m_Gfx.GetContext());
+	m_Constant.Initialize(m_Gfx.GetDevice(), m_Gfx.GetContext());
+	m_Camera.Initialize(m_Width / m_Height);
 }

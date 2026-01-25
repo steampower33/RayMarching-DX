@@ -21,8 +21,6 @@ private:
 
 private:
     void CreateShader();
-
-    // Shader pipeline objects
     ComPtr<ID3D11VertexShader> m_FullScreenVS;
     ComPtr<ID3D11PixelShader> m_RayMarchingPS;
     ComPtr<ID3D11InputLayout> m_InputLayout;

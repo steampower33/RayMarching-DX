@@ -19,6 +19,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{397be2de-b056-49e4-b266-e842b953bc38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Tools">
+      <UniqueIdentifier>{ab0b16c4-d6d4-4cf4-84b6-58e7fb1ba5df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\ImGui\imgui.cpp">
@@ -57,7 +60,13 @@
     <ClCompile Include="Source\App\TerraForgeApp.cpp">
       <Filter>Source\App</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Gui.cpp">
+    <ClCompile Include="Source\Core\Constant.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Tools\Gui.cpp">
+      <Filter>Source\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Camera.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,7 +110,16 @@
     <ClInclude Include="Source\Core\Vertex.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Gui.h">
+    <ClInclude Include="Source\Tools\GameTimer.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Constant.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tools\Gui.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Camera.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
   </ItemGroup>

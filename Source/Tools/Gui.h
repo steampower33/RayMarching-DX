@@ -1,5 +1,8 @@
 #pragma once
 
+class Constant;
+class Camera;
+
 class Gui
 {
 public:
@@ -13,6 +16,6 @@ public:
 
     void Initialize(HWND hWnd, ID3D11Device* device, ID3D11DeviceContext* context);
 
-    void Render();
+    void Render(Constant& constant, Camera& camera, float totalTime);
 
 };

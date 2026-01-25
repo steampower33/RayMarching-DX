@@ -8,7 +8,7 @@ void Renderer::Initialize(ID3D11Device* device, ID3D11DeviceContext* context)
 	m_Context = context;
 
 	CreateShader();
-	CreateQuadVertexBuffer();
+	//CreateQuadVertexBuffer();
 }
 
 void Renderer::CreateShader()
@@ -54,13 +54,13 @@ void Renderer::PrepareShader()
 {
 	m_Context->VSSetShader(m_FullScreenVS.Get(), nullptr, 0);
 	m_Context->PSSetShader(m_RayMarchingPS.Get(), nullptr, 0);
-	m_Context->IASetInputLayout(m_InputLayout.Get());
+	//m_Context->IASetInputLayout(m_InputLayout.Get());
 }
 
 void Renderer::Render()
 {
 	UINT offset = 0;
-	m_Context->IASetVertexBuffers(0, 1, &m_VertexBuffer, &m_Stride, &offset);
+	m_Context->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &m_Stride, &offset);
 	m_Context->Draw(3, 0);
 }
 
