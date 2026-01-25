@@ -127,8 +127,20 @@
     <FxCompile Include="Shaders\FullScreenVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\RayMarchingPS.hlsl">
+    <FxCompile Include="Shaders\CloudPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="Shaders\Distance2DPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Distance3DPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Common.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

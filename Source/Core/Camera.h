@@ -1,21 +1,28 @@
 #pragma once
 
+#include <SimpleMath.h>
+
 class Camera
 {
+public:
+    // Type aliasing for better readability and maintainability
+    using Vector3 = DirectX::SimpleMath::Vector3;
+    using Matrix = DirectX::SimpleMath::Matrix;
+
 public:
     Camera();
 
     void Initialize(float aspectRatio);
-
     void Update(float dt);
 
-    DirectX::XMMATRIX GetViewMatrix() const;
-    DirectX::XMMATRIX GetProjectionMatrix() const;
+    Matrix GetViewMatrix() const;
+    Matrix GetProjectionMatrix() const;
 
-    DirectX::XMFLOAT3 m_Pos{ 0.0f, 3.0f, -5.0f };
-    DirectX::XMFLOAT3 m_LookDir{ 0.0f, 0.0f, 1.0f };
-    DirectX::XMFLOAT3 m_UpDir{ 0.0f, 1.0f, 0.0f };
-    DirectX::XMFLOAT3 m_RightDir{ 1.0f, 0.0f, 0.0f };
+    // Camera basis vectors using SimpleMath types
+    Vector3 m_Pos{ 0.0f, 0.0f, -10.0f };
+    Vector3 m_LookDir{ 0.0f, 0.0f, 1.0f };
+    Vector3 m_UpDir{ 0.0f, 1.0f, 0.0f };
+    Vector3 m_RightDir{ 1.0f, 0.0f, 0.0f };
 
 private:
     void ProcessKeyboard(float dt);

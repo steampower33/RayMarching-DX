@@ -12,36 +12,22 @@ void Constant::UpdateConstant(Camera& camera, float deltaTime, float totalTime, 
 		return;
 	}
 
+	// Update local struct first
+	m_Constants.iTime = totalTime;
+	m_Constants.iResolution = Vector2(width, height);
+
+	m_Constants.iCameraPos = camera.m_Pos;
+	m_Constants.iCameraForward = camera.m_LookDir;
+	m_Constants.iCameraRight = camera.m_RightDir;
+	m_Constants.iCameraUp = Vector3(0.0f, 1.0f, 0.0f);
+
+	// Map to GPU
 	D3D11_MAPPED_SUBRESOURCE msr;
-	m_Context->Map(m_ConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-	Constants* data = (Constants*)msr.pData;
-
-	data->iTime = totalTime;
-	data->iResolution[0] = width;
-	data->iResolution[1] = height;
-
-	auto pos = camera.m_Pos;
-	data->iCameraPos[0] = pos.x;
-	data->iCameraPos[1] = pos.y;
-	data->iCameraPos[2] = pos.z;
-
-	auto fwd = camera.m_LookDir;
-	data->iCameraForward[0] = fwd.x;
-	data->iCameraForward[1] = fwd.y;
-	data->iCameraForward[2] = fwd.z;
-
-	auto right = camera.m_RightDir;
-	data->iCameraRight[0] = right.x;
-	data->iCameraRight[1] = right.y;
-	data->iCameraRight[2] = right.z;
-
-	auto up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	XMFLOAT3 upF; XMStoreFloat3(&upF, up);
-	data->iCameraUp[0] = upF.x;
-	data->iCameraUp[1] = upF.y;
-	data->iCameraUp[2] = upF.z;
-
-    m_Context->Unmap(m_ConstantBuffer.Get(), 0);
+	if (SUCCEEDED(m_Context->Map(m_ConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr)))
+	{
+		memcpy(msr.pData, &m_Constants, sizeof(Constants));
+		m_Context->Unmap(m_ConstantBuffer.Get(), 0);
+	}
 }
 
 void Constant::Initialize(ID3D11Device* device, ID3D11DeviceContext* context)
@@ -49,6 +35,7 @@ void Constant::Initialize(ID3D11Device* device, ID3D11DeviceContext* context)
 	m_Device = device;
 	m_Context = context;
 
+	InitData();
 	CreateConstantBuffer();
 }
 
@@ -71,4 +58,21 @@ void Constant::CreateConstantBuffer()
 void Constant::BindConstantBuffer()
 {
 	m_Context->PSSetConstantBuffers(0, 1, m_ConstantBuffer.GetAddressOf());
+}
+void Constant::InitData()
+{
+	m_Constants.iTime = 0.0f;
+	m_Constants.iStepSize = 0.1f;
+	m_Constants.iCloudScale = 0.5f;
+	m_Constants.iCloudThreshold = 0.5f;
+	m_Constants.iAbsorption = 1.5f;
+	m_Constants.iFogDensity = 0.01f;
+
+	m_Constants.iSunDir = Vector3(0.577f, -0.577f, 0.577f);
+	m_Constants.iSunColor = Vector3(1.0f, 0.95f, 0.85f);
+	m_Constants.iFogColor = Vector3(0.5f, 0.6f, 0.7f);
+
+	m_Constants.padding1 = 0.0f;
+	m_Constants.padding2 = 0.0f;
+	m_Constants.padding3 = 0.0f;
 }

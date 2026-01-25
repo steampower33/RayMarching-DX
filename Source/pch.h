@@ -10,6 +10,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
+#include <SimpleMath.h>
 #include <wrl.h>
 
 #pragma comment(lib, "d3d11.lib")

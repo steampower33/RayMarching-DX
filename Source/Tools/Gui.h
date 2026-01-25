@@ -2,6 +2,7 @@
 
 class Constant;
 class Camera;
+class Renderer;
 
 class Gui
 {
@@ -16,6 +17,6 @@ public:
 
     void Initialize(HWND hWnd, ID3D11Device* device, ID3D11DeviceContext* context);
 
-    void Render(Constant& constant, Camera& camera, float totalTime);
+    void Render(Constant& constant, Camera& camera, Renderer& renderer, float totalTime);
 
 };

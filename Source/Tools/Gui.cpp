@@ -1,5 +1,6 @@
 #include "Constant.h"
 #include "Camera.h"
+#include "Renderer.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -24,17 +25,65 @@ void Gui::Initialize(HWND hWnd, ID3D11Device* device, ID3D11DeviceContext* conte
 	ImGui_ImplDX11_Init(device, context);
 }
 
-void Gui::Render(Constant& constant, Camera& camera, float totalTime)
+void Gui::Render(Constant& constant, Camera& camera, Renderer& renderer, float totalTime)
 {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("Debug Info");
-	ImGui::Text("Time: %.2f s", totalTime);
-	ImGui::Text("Camera: %.1f, %.1f, %.1f", camera.m_Pos.x, camera.m_Pos.y, camera.m_Pos.z);
+	if (ImGui::Begin("Settings"))
+	{
+		auto io = ImGui::GetIO();
 
-	ImGui::End();
+		ImGui::Text("Time: %.2f s", totalTime);
+		ImGui::Text("Average FPS: %.1f", ImGui::GetIO().Framerate);
+		ImGui::Text("Frame Time: %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
+		ImGui::Text("IO DisplaySize: %.1f, %.1f", io.DisplaySize.x, io.DisplaySize.y);
+
+		ImGui::Text("Camera: %.1f, %.1f, %.1f", camera.m_Pos.x, camera.m_Pos.y, camera.m_Pos.z);
+		ImGui::Text("Mouse Pos: %.1f, %.1f", io.MousePos.x, io.MousePos.y);
+
+		if (ImGui::CollapsingHeader("Scene"))
+		{
+			ImGui::Checkbox("Distance2D", &renderer.m_Scene.bDistance2D);
+			ImGui::Checkbox("Distance3D", &renderer.m_Scene.bDistance3D);
+			ImGui::Checkbox("Cloud", &renderer.m_Scene.bCloud);
+		}
+
+		if (ImGui::CollapsingHeader("Cloud & Atmosphere Settings"))
+		{
+			// Section 1: Performance
+			ImGui::Text("Performance");
+			ImGui::SliderFloat("Step Size", &constant.m_Constants.iStepSize, 0.01f, 0.5f, "%.3f");
+			ImGui::Separator();
+
+			// Section 2: Cloud Shape
+			ImGui::Text("Cloud Shape");
+			ImGui::SliderFloat("Cloud Scale", &constant.m_Constants.iCloudScale, 0.1f, 5.0f);
+			ImGui::SliderFloat("Coverage (Threshold)", &constant.m_Constants.iCloudThreshold, 0.0f, 1.0f);
+			ImGui::Separator();
+
+			// Section 3: Lighting (Sun)
+			ImGui::Text("Sun Lighting");
+			// Passing &vector.x allows ImGui to access it as a float array
+			if (ImGui::SliderFloat3("Sun Direction", &constant.m_Constants.iSunDir.x, -1.0f, 1.0f))
+			{
+				// Direction must be normalized after manual adjustment
+				constant.m_Constants.iSunDir.Normalize();
+			}
+			ImGui::ColorEdit3("Sun Color", &constant.m_Constants.iSunColor.x);
+			ImGui::SliderFloat("Absorption", &constant.m_Constants.iAbsorption, 0.0f, 10.0f);
+			ImGui::Separator();
+
+			// Section 4: Atmosphere & Fog
+			ImGui::Text("Atmosphere");
+			ImGui::SliderFloat("Fog Density", &constant.m_Constants.iFogDensity, 0.0f, 0.5f);
+			ImGui::ColorEdit3("Fog Color", &constant.m_Constants.iFogColor.x);
+		}
+
+		ImGui::End();
+	}
+
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

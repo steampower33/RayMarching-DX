@@ -83,7 +83,7 @@ void GraphicsCore::EndFrame()
 {
     // Present the back buffer to the screen
     // 1 = VSync On, 0 = VSync Off (Uncapped FPS)
-    m_SwapChain->Present(1, 0);
+    m_SwapChain->Present(0, 0);
 }
 
 void GraphicsCore::OnResize(int width, int height)

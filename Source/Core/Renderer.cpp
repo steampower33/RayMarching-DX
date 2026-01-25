@@ -13,47 +13,62 @@ void Renderer::Initialize(ID3D11Device* device, ID3D11DeviceContext* context)
 
 void Renderer::CreateShader()
 {
-	ID3DBlob* vertexshaderCSO;
-	ID3DBlob* pixelshaderCSO;
-	ID3DBlob* errorBlob;
+	ID3DBlob* vsBlob = nullptr;
+	ID3DBlob* psBlob = nullptr;
 
-	// Compile Vertex Shader
-	HRESULT hr = D3DCompileFromFile(L"Shaders/FullScreenVS.hlsl", nullptr, nullptr, "main", "vs_5_0", 0, 0, &vertexshaderCSO, &errorBlob);
-	if (FAILED(hr)) {
-		if (errorBlob) OutputDebugStringA((char*)errorBlob->GetBufferPointer());
-		return;
-	}
-
-	m_Device->CreateVertexShader(vertexshaderCSO->GetBufferPointer(), vertexshaderCSO->GetBufferSize(), nullptr, &m_FullScreenVS);
-
-	// Compile Pixel Shader
-	hr = D3DCompileFromFile(L"Shaders/RayMarchingPS.hlsl", nullptr, nullptr, "main", "ps_5_0", 0, 0, &pixelshaderCSO, &errorBlob);
-	if (FAILED(hr)) {
-		if (errorBlob) OutputDebugStringA((char*)errorBlob->GetBufferPointer());
-		return;
-	}
-
-	m_Device->CreatePixelShader(pixelshaderCSO->GetBufferPointer(), pixelshaderCSO->GetBufferSize(), nullptr, &m_RayMarchingPS);
-
-	// Define Input Layout
-	D3D11_INPUT_ELEMENT_DESC layout[] =
+	if (SUCCEEDED(CompileShader(L"FullScreenVS.hlsl", "vs_5_0", &vsBlob)))
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
+		m_Device->CreateVertexShader(
+			vsBlob->GetBufferPointer(),
+			vsBlob->GetBufferSize(),
+			nullptr,
+			&m_FullScreenVS
+		);
 
-	m_Device->CreateInputLayout(layout, ARRAYSIZE(layout), vertexshaderCSO->GetBufferPointer(), vertexshaderCSO->GetBufferSize(), &m_InputLayout);
+		//// Define Input Layout
+		//D3D11_INPUT_ELEMENT_DESC layout[] =
+		//{
+		//	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		//};
 
-	m_Stride = sizeof(Vertex);
+		//m_Device->CreateInputLayout(layout, ARRAYSIZE(layout), vertexshaderCSO->GetBufferPointer(), vertexshaderCSO->GetBufferSize(), &m_InputLayout);
 
-	vertexshaderCSO->Release();
-	pixelshaderCSO->Release();
-	if (errorBlob) errorBlob->Release();
+		//m_Stride = sizeof(Vertex);
+	}
+
+	if (SUCCEEDED(CompileShader(L"Distance2DPS.hlsl", "ps_5_0", &psBlob)))
+	{
+		m_Device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &m_Distance2DPS);
+		psBlob->Release();
+		psBlob = nullptr;
+	}
+	if (SUCCEEDED(CompileShader(L"Distance3DPS.hlsl", "ps_5_0", &psBlob)))
+	{
+		m_Device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &m_Distance3DPS);
+		psBlob->Release();
+		psBlob = nullptr;
+	}
+
+	if (SUCCEEDED(CompileShader(L"CloudPS.hlsl", "ps_5_0", &psBlob)))
+	{
+		m_Device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &m_CloudPS);
+		psBlob->Release();
+		psBlob = nullptr;
+	}
+
+	if (vsBlob) vsBlob->Release();
 }
 
 void Renderer::PrepareShader()
 {
 	m_Context->VSSetShader(m_FullScreenVS.Get(), nullptr, 0);
-	m_Context->PSSetShader(m_RayMarchingPS.Get(), nullptr, 0);
+
+	if (m_Scene.bDistance2D)
+		m_Context->PSSetShader(m_Distance2DPS.Get(), nullptr, 0);
+	if (m_Scene.bDistance3D)
+		m_Context->PSSetShader(m_Distance3DPS.Get(), nullptr, 0);
+	if (m_Scene.bCloud)
+		m_Context->PSSetShader(m_CloudPS.Get(), nullptr, 0);
 	//m_Context->IASetInputLayout(m_InputLayout.Get());
 }
 
@@ -74,4 +89,33 @@ void Renderer::CreateQuadVertexBuffer()
 	D3D11_SUBRESOURCE_DATA vertexbufferSRD = { quad_vertices };
 
 	m_Device->CreateBuffer(&vertexbufferdesc, &vertexbufferSRD, &m_VertexBuffer);
+}
+
+HRESULT Renderer::CompileShader(const std::wstring& filename, const std::string& profile, ID3DBlob** shaderBlob)
+{
+	ID3DBlob* errorBlob = nullptr;
+
+	std::wstring path = L"Shaders/" + filename;
+
+	HRESULT hr = D3DCompileFromFile(
+		path.c_str(),
+		nullptr, 
+		D3D_COMPILE_STANDARD_FILE_INCLUDE,
+		"main",                 // Entry Point
+		profile.c_str(),        // version
+		0, 0,
+		shaderBlob,             // result
+		&errorBlob
+	);
+
+	if (FAILED(hr)) {
+		if (errorBlob) {
+			OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+			errorBlob->Release();
+		}
+		return hr;
+	}
+
+	if (errorBlob) errorBlob->Release();
+	return hr;
 }
