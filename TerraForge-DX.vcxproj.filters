@@ -142,5 +142,14 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="Shaders\SDF.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Intersect.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Noise.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

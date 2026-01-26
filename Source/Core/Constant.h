@@ -16,37 +16,29 @@ public:
 public:
     struct Constants
     {
-        // Register 0
-        float   iTime;              // Elapsed time in seconds
-        Vector2 iResolution;        // Viewport resolution (Width, Height)
-        float   iStepSize;          // Raymarching step size
+        float   Time;              // Elapsed time in seconds
+        Vector2 Resolution;        // Viewport resolution (Width, Height)
+        float   StepSize;          // Raymarching step size
 
-        // Register 1
-        Vector3 iCameraPos;         // World space camera position
-        float   iCloudScale;        // Noise frequency for cloud shaping
+        Vector3 CameraPos;         // World space camera position
+        float   CloudScale;        // Noise frequency for cloud shaping
 
-        // Register 2
-        Vector3 iCameraForward;     // Camera look direction
-        float   iCloudThreshold;    // Cloud coverage cutoff
+        Vector3 CameraForward;     // Camera look direction
+        float   CloudThreshold;    // Cloud coverage cutoff
 
-        // Register 3
-        Vector3 iCameraRight;       // Camera right vector
-        float   iAbsorption;        // Light absorption coefficient
+        Vector3 CameraRight;       // Camera right vector
+        float   Absorption;        // Light absorption coefficient
 
-        // Register 4
-        Vector3 iCameraUp;          // Camera up vector
-        float   iFogDensity;        // Global fog density
+        Vector3 CameraUp;          // Camera up vector
+        float   FogDensity;        // Global fog density
 
-        // Register 5
-        Vector3 iSunDir;            // Direction to the sun
+        Vector3 SunDir;            // Direction to the sun
         float   padding1;           // 16-byte alignment padding
 
-        // Register 6
-        Vector3 iSunColor;          // RGB color of the sunlight
+        Vector3 SunColor;          // RGB color of the sunlight
         float   padding2;           // 16-byte alignment padding
 
-        // Register 7
-        Vector3 iFogColor;          // RGB color of the atmospheric fog
+        Vector3 FogColor;          // RGB color of the atmospheric fog
         float   padding3;           // 16-byte alignment padding
     };
 

@@ -28,13 +28,13 @@ float rayMarch(float3 ro, float3 rd)
 float4 main(VS_OUTPUT input) : SV_Target
 {
     float2 p = (input.uv - 0.5) * 2.0;
-    p.x *= iResolution.x / iResolution.y;
+    p.x *= Resolution.x / Resolution.y;
     p.y = -p.y;
     
-    float3 ro = iCameraPos;
-    float3 fwd = iCameraForward;
-    float3 right = iCameraRight;
-    float3 up = iCameraUp;
+    float3 ro = CameraPos;
+    float3 fwd = CameraForward;
+    float3 right = CameraRight;
+    float3 up = CameraUp;
     
     const float fl = 2.5;
     float3 rd = normalize(p.x * right + p.y * up + fl * fwd);

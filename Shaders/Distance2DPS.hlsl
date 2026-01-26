@@ -20,7 +20,7 @@ float sdBox(in float2 p, in float2 b)
 float4 main(VS_OUTPUT input) : SV_Target
 {
     float2 p = (input.uv - 0.5) * 2.0;
-    p.x *= iResolution.x / iResolution.y;
+    p.x *= Resolution.x / Resolution.y;
     p.y = -p.y;
     
     //float d = sdCircle(p, 0.5);

@@ -38,31 +38,31 @@ void Gui::Render(Constant& constant, Camera& camera, Renderer& renderer, float t
 		{
 			// Section 1: Performance
 			ImGui::Text("Performance");
-			ImGui::SliderFloat("Step Size", &constant.m_Constants.iStepSize, 0.01f, 0.5f, "%.3f");
+			ImGui::SliderFloat("Step Size", &constant.m_Constants.StepSize, 0.01f, 0.5f, "%.3f");
 			ImGui::Separator();
 
 			// Section 2: Cloud Shape
 			ImGui::Text("Cloud Shape");
-			ImGui::SliderFloat("Cloud Scale", &constant.m_Constants.iCloudScale, 0.1f, 5.0f);
-			ImGui::SliderFloat("Coverage (Threshold)", &constant.m_Constants.iCloudThreshold, 0.0f, 1.0f);
+			ImGui::SliderFloat("Cloud Scale", &constant.m_Constants.CloudScale, 0.1f, 5.0f);
+			ImGui::SliderFloat("Coverage (Threshold)", &constant.m_Constants.CloudThreshold, 0.0f, 1.0f);
 			ImGui::Separator();
 
 			// Section 3: Lighting (Sun)
 			ImGui::Text("Sun Lighting");
 			// Passing &vector.x allows ImGui to access it as a float array
-			if (ImGui::SliderFloat3("Sun Direction", &constant.m_Constants.iSunDir.x, -1.0f, 1.0f))
+			if (ImGui::SliderFloat3("Sun Direction", &constant.m_Constants.SunDir.x, -1.0f, 1.0f))
 			{
 				// Direction must be normalized after manual adjustment
-				constant.m_Constants.iSunDir.Normalize();
+				constant.m_Constants.SunDir.Normalize();
 			}
-			ImGui::ColorEdit3("Sun Color", &constant.m_Constants.iSunColor.x);
-			ImGui::SliderFloat("Absorption", &constant.m_Constants.iAbsorption, 0.0f, 10.0f);
+			ImGui::ColorEdit3("Sun Color", &constant.m_Constants.SunColor.x);
+			ImGui::SliderFloat("Absorption", &constant.m_Constants.Absorption, 0.0f, 50.0f);
 			ImGui::Separator();
 
 			// Section 4: Atmosphere & Fog
 			ImGui::Text("Atmosphere");
-			ImGui::SliderFloat("Fog Density", &constant.m_Constants.iFogDensity, 0.0f, 0.5f);
-			ImGui::ColorEdit3("Fog Color", &constant.m_Constants.iFogColor.x);
+			ImGui::SliderFloat("Fog Density", &constant.m_Constants.FogDensity, 0.0f, 0.5f);
+			ImGui::ColorEdit3("Fog Color", &constant.m_Constants.FogColor.x);
 		}
 
 	}
