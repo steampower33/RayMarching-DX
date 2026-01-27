@@ -3,52 +3,55 @@
 class Renderer
 {
 public:
-    Renderer() {}
-    ~Renderer() {}
+	Renderer() {}
+	~Renderer() {}
 
-    // [Rule] System classes should NOT be copied.
-    // Copying a core system creates ambiguity in resource ownership.
-    Renderer(const Renderer&) = delete;
-    Renderer& operator=(const Renderer&) = delete;
+	// [Rule] System classes should NOT be copied.
+	// Copying a core system creates ambiguity in resource ownership.
+	Renderer(const Renderer&) = delete;
+	Renderer& operator=(const Renderer&) = delete;
 
-    void Initialize(ID3D11Device* device, ID3D11DeviceContext* context);
-    void PrepareShader();
-    void Render();
+	void Initialize(ID3D11Device* device, ID3D11DeviceContext* context);
+	void PrepareShader();
+	void Render();
 
-    struct Scene {
-        bool bDistance2D = false;
-        bool bDistance3D = false;
-        bool bCloud = true;
-    } m_Scene;
-
-private:
-    ID3D11Device* m_Device = nullptr;
-    ID3D11DeviceContext* m_Context = nullptr;
+	struct Scene {
+		bool bDistance2D = false;
+		bool bDistance3D = false;
+		bool bCloud = true;
+	} m_Scene;
 
 private:
-    void CreateShader();
-    ComPtr<ID3D11VertexShader> m_FullScreenVS;
+	ID3D11Device* m_Device = nullptr;
+	ID3D11DeviceContext* m_Context = nullptr;
 
-    ComPtr<ID3D11PixelShader> m_Distance2DPS;
-    ComPtr<ID3D11PixelShader> m_Distance3DPS;
-    ComPtr<ID3D11PixelShader> m_CloudPS;
+private:
+	void CreateShader();
+	ComPtr<ID3D11VertexShader> m_FullScreenVS;
 
-    ComPtr<ID3D11ComputeShader> m_NoiseBakerCS;
+	ComPtr<ID3D11PixelShader> m_Distance2DPS;
+	ComPtr<ID3D11PixelShader> m_Distance3DPS;
+	ComPtr<ID3D11PixelShader> m_CloudPS;
 
-    ComPtr<ID3D11InputLayout> m_InputLayout;
-    unsigned int m_Stride;
+	ComPtr<ID3D11ComputeShader> m_NoiseBakerCS;
 
-    void CreateQuadVertexBuffer();
-    ComPtr<ID3D11Buffer> m_VertexBuffer;
+	ComPtr<ID3D11InputLayout> m_InputLayout;
+	unsigned int m_Stride;
 
-    HRESULT CompileShader(const std::wstring& filename, const std::string& profile, ID3DBlob** shaderBlob);
+	void CreateQuadVertexBuffer();
+	ComPtr<ID3D11Buffer> m_VertexBuffer;
 
-    void CreateTexture();
+	HRESULT CompileShader(const std::wstring& filename, const std::string& profile, ID3DBlob** shaderBlob);
 
-    ComPtr<ID3D11Texture2D> m_NoiseTexture;
-    ComPtr<ID3D11UnorderedAccessView> m_NoiseUAV;
+	void CreateTexture();
+
+	ComPtr<ID3D11Texture2D> m_NoiseTexture;
+	ComPtr<ID3D11UnorderedAccessView> m_NoiseUAV;
+
+	void CreateSamplerState();
+	ComPtr<ID3D11SamplerState> m_LinearSampler;
 
 public:
-    ComPtr<ID3D11ShaderResourceView> m_NoiseSRV;
-    void BakeNoise();
+	ComPtr<ID3D11ShaderResourceView> m_NoiseSRV;
+	void BakeNoise();
 };

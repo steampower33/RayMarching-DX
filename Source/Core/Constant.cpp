@@ -19,7 +19,7 @@ void Constant::UpdateConstant(Camera& camera, float deltaTime, float totalTime, 
 	m_Constants.CameraPos = camera.m_Pos;
 	m_Constants.CameraForward = camera.m_LookDir;
 	m_Constants.CameraRight = camera.m_RightDir;
-	m_Constants.CameraUp = Vector3(0.0f, 1.0f, 0.0f);
+	m_Constants.CameraUp = camera.m_UpDir;
 
 	// Map to GPU
 	D3D11_MAPPED_SUBRESOURCE msr;
@@ -68,7 +68,7 @@ void Constant::InitData()
 	m_Constants.Absorption = 0.5f;
 	m_Constants.FogDensity = 0.01f;
 
-	m_Constants.SunDir = Vector3(0.577f, -0.577f, 0.577f);
+	m_Constants.SunDir = Vector3(0.639f, 0.427f, 0.639f);
 	m_Constants.SunColor = Vector3(1.0f, 0.95f, 0.85f);
 	m_Constants.FogColor = Vector3(0.5f, 0.6f, 0.7f);
 

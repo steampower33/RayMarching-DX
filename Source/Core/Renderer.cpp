@@ -9,6 +9,7 @@ void Renderer::Initialize(ID3D11Device* device, ID3D11DeviceContext* context)
 
 	CreateShader();
 	CreateTexture();
+	CreateSamplerState();
 	//CreateQuadVertexBuffer();
 }
 
@@ -77,8 +78,13 @@ void Renderer::PrepareShader()
 	if (m_Scene.bDistance3D)
 		m_Context->PSSetShader(m_Distance3DPS.Get(), nullptr, 0);
 	if (m_Scene.bCloud)
+	{
 		m_Context->PSSetShader(m_CloudPS.Get(), nullptr, 0);
+		m_Context->PSSetShaderResources(0, 1, m_NoiseSRV.GetAddressOf());
+		m_Context->PSSetSamplers(0, 1, m_LinearSampler.GetAddressOf());
+	}
 	//m_Context->IASetInputLayout(m_InputLayout.Get());
+
 }
 
 void Renderer::Render()
@@ -189,4 +195,22 @@ void Renderer::BakeNoise()
 
 	// Optional: Unbind the Compute Shader to maintain a clean pipeline state
 	m_Context->CSSetShader(nullptr, nullptr, 0);
+}
+
+void Renderer::CreateSamplerState()
+{
+	D3D11_SAMPLER_DESC sampDesc = {};
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; // Enable linear interpolation
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;    // Essential for tileable noise
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	// Create the sampler state
+	HRESULT hr = m_Device->CreateSamplerState(&sampDesc, &m_LinearSampler);
+	if (FAILED(hr)) {
+		// Handle error
+	}
 }

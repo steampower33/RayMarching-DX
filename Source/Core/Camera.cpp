@@ -52,14 +52,15 @@ void Camera::ProcessMouse(float dt)
 
     GetCursorPos(&m_LastMousePos);
 
-    // Using Matrix and Vector3 operations
     Matrix rotation = Matrix::CreateFromYawPitchRoll(m_Yaw, m_Pitch, 0.0f);
 
     m_LookDir = Vector3::TransformNormal(Vector3(0, 0, 1), rotation);
     m_RightDir = Vector3::TransformNormal(Vector3(1, 0, 0), rotation);
+    m_UpDir = Vector3::TransformNormal(Vector3(0, 1, 0), rotation);
 
     m_LookDir.Normalize();
     m_RightDir.Normalize();
+    m_UpDir.Normalize();
 }
 
 Camera::Matrix Camera::GetViewMatrix() const

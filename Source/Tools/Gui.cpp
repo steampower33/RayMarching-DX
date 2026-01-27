@@ -65,19 +65,12 @@ void Gui::Render(Constant& constant, Camera& camera, Renderer& renderer, float t
 			ImGui::ColorEdit3("Fog Color", &constant.m_Constants.FogColor.x);
 		}
 
-	}
-
-	ImGui::End();
-
-	if (ImGui::Begin("Noise Preview"))
-	{
-		ImGui::Image((void*)renderer.m_NoiseSRV.Get(), ImVec2(204, 204));
-
-		if (ImGui::Button("Re-Bake"))
+		if (ImGui::CollapsingHeader("Noise", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			renderer.BakeNoise();
+			ImGui::Image((void*)renderer.m_NoiseSRV.Get(), ImVec2(204, 204));
 		}
 	}
+
 	ImGui::End();
 
 	ImGui::Render();
